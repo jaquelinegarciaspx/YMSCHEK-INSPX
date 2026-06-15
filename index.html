@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YMSJaquelineGarcia — Check-in Hub LPR-24 | Shopee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange:#EE4D2D;--orange-light:#FFF0ED;--orange-mid:#FFDDD7;--orange-dark:#B83410;
+  --green:#16A34A;--green-light:#F0FDF4;--green-mid:#BBF7D0;--green-dark:#166534;
+  --gray:#6B7280;--gray-light:#F3F4F6;--gray-mid:#D1D5DB;--gray-dark:#374151;
+  --blue:#3B82F6;
+  --bg:#F8F7F4;--surface:#FFFFFF;--surface2:#F1EFE8;
+  --border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.18);
+  --text:#1A1A18;--text2:#5C5C58;--text3:#9A9A94;
+  --radius:8px;--radius-lg:12px;
+  --font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1A1A18;--surface:#242422;--surface2:#2C2C2A;
+  --border:rgba(255,255,255,0.10);--border2:rgba(255,255,255,0.18);
+  --text:#F0EFE8;--text2:#A8A8A0;--text3:#6A6A64;
+  --green-light:#0D2818;--green-mid:#15532A;--green-dark:#4ADE80;
+  --gray-light:#1F2937;--gray-mid:#374151;--gray-dark:#9CA3AF;
+  --orange-light:#2A1208;--orange-mid:#6B2010;--orange-dark:#FCA07A;
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;height:56px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.shopee-logo{background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.top-title{font-size:15px;font-weight:600;color:var(--text)}
+.top-hub{font-size:12px;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:99px;border:1px solid var(--border)}
+.top-clock{margin-left:auto;font-size:12px;color:var(--text3);font-family:var(--mono)}
+
+.main{max-width:1300px;margin:0 auto;padding:1.25rem}
+
+.import-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1rem;transition:all .3s ease}
+.import-section.collapsed{padding:0;margin-bottom:.75rem}
+.import-collapse-bar{display:none;align-items:center;justify-content:space-between;padding:8px 14px;cursor:pointer;user-select:none}
+.import-section.collapsed .import-collapse-bar{display:flex}
+.import-section.collapsed .import-body{display:none}
+.import-collapse-bar:hover{background:var(--surface2)}
+.icb-label{font-size:12px;font-weight:500;color:var(--text2);display:flex;align-items:center;gap:8px}
+.icb-files{font-size:11px;color:var(--green);font-family:var(--mono)}
+.icb-expand{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.import-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+
+.drop-zone{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:18px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;display:flex;flex-direction:row;align-items:center;gap:14px}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--orange);background:var(--orange-light)}
+.drop-zone.loaded{border-style:solid;border-color:var(--green);background:var(--green-light)}
+.file-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-icon{font-size:28px;color:var(--text3);transition:color .2s;flex-shrink:0}
+.drop-zone.loaded .dz-icon{color:var(--green)}
+.dz-body{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:0}
+.dz-title{font-size:13px;font-weight:600;color:var(--text)}
+.dz-hint{font-size:11px;color:var(--text3)}
+.dz-filename{font-size:11px;font-weight:500;color:var(--green);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.dz-cols{display:none;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);width:100%;text-align:left}
+.dz-cols.visible{display:block}
+.col-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.col-row label{font-size:11px;color:var(--text2);font-weight:500;min-width:110px}
+.col-row select{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);cursor:pointer;flex:1;min-width:0}
+.dz-preview{font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.dz-info{display:none}
+
+.btn-proc{width:100%;padding:9px;background:var(--orange);color:#fff;font-size:14px;font-weight:600;font-family:var(--font);border:none;border-radius:var(--radius);cursor:pointer;letter-spacing:.3px;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-proc:hover{opacity:.9}
+.btn-proc:active{transform:scale(.99)}
+.btn-proc:disabled{opacity:.4;cursor:not-allowed}
+
+.metrics-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1rem}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
+.mc:hover{border-color:var(--orange);background:var(--orange-light)}
+.mc.mc-active{border-color:var(--orange);background:var(--orange-light)}
+.mc.mc-disabled{cursor:default}
+.mc.mc-disabled:hover{border-color:var(--border);background:var(--surface)}
+.mc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:5px}
+.phone-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:1px 8px;flex-shrink:0}
+.wa-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:#25D366;color:#fff;text-decoration:none;flex-shrink:0;transition:opacity .15s}
+.wa-btn:hover{opacity:.85}
+.dr-phone-row{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
+.mc-val{font-size:28px;font-weight:600;line-height:1}
+
+.prog-wrap{height:8px;background:var(--surface2);border-radius:99px;margin-bottom:1.25rem;overflow:hidden;border:1px solid var(--border)}
+.prog-fill{height:100%;border-radius:99px;transition:width .6s ease;background:var(--green)}
+
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1rem}
+.tabs{display:flex;padding:0 16px;border-bottom:1px solid var(--border);background:var(--surface)}
+.tab-btn{padding:11px 16px;font-size:13px;font-weight:500;font-family:var(--font);color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;transition:color .15s}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--orange);border-bottom-color:var(--orange);font-weight:600}
+
+.view-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.view-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+.badges-row{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11px;padding:2px 10px;border-radius:99px;font-weight:600;white-space:nowrap}
+.badge-pend{background:var(--orange-light);color:var(--orange-dark);border:1px solid var(--orange-mid)}
+.badge-ok{background:var(--green-light);color:var(--green-dark);border:1px solid var(--green-mid)}
+.badge-done{background:var(--gray-light);color:var(--gray-dark);border:1px solid var(--gray-mid)}
+
+.region-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;padding:16px}
+.reg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.reg-hdr{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-bottom:1px solid var(--border)}
+.reg-name{font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px;color:var(--text)}
+.reg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.reg-count{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.driver-list{padding:6px;display:flex;flex-direction:column;gap:3px}
+.dr-row{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:var(--radius);font-size:12px}
+.dr-row.st-pending{background:var(--orange-light);border:1px solid var(--orange-mid);color:var(--orange-dark);font-weight:600}
+.dr-row.st-assigned{background:var(--green-light);color:var(--green-dark)}
+.dr-row.st-ended{background:var(--gray-light);color:var(--gray-dark)}
+.dr-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-sub{font-size:10px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px}
+.dr-tag{font-size:10px;padding:1px 7px;border-radius:99px;font-weight:600;flex-shrink:0;font-family:var(--mono)}
+.tag-pending{background:var(--orange-mid);color:var(--orange-dark)}
+.tag-assigned{background:var(--green-mid);color:var(--green-dark)}
+.tag-ended{background:var(--gray-mid);color:var(--gray-dark)}
+.letter-filter{display:flex;align-items:stretch;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.lf-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:68px;padding:8px 12px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s;gap:2px;user-select:none}
+.lf-btn:hover{border-color:var(--orange);background:var(--orange-light)}
+.lf-btn.active{border-color:var(--orange);background:var(--orange-light)}
+.lf-letter{font-size:20px;font-weight:700;line-height:1}
+.lf-btn.lA .lf-letter{color:#1D4ED8}
+.lf-btn.lB .lf-letter{color:#15803D}
+.lf-btn.lC .lf-letter{color:#C2410C}
+.lf-btn.lD .lf-letter{color:#7E22CE}
+.lf-btn.lE .lf-letter{color:#BE123C}
+.lf-btn.lF .lf-letter{color:#0F766E}
+.lf-btn.lX .lf-letter{color:var(--text2)}
+.lf-stats{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.lf-num{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;cursor:pointer;transition:opacity .15s,transform .1s;border:1.5px solid transparent}
+.lf-num:hover{opacity:.75;transform:scale(1.08)}
+.lf-num.active-filter{border-color:currentColor;box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+.lf-num.p{background:var(--orange-mid);color:var(--orange-dark)}
+.lf-num.a{background:var(--green-mid);color:var(--green-dark)}
+.lf-num.e{background:var(--gray-mid);color:var(--gray-dark)}
+.lf-routes{font-size:10px;color:var(--text3);margin-top:1px}
+.lf-all{min-width:52px}
+.lf-all .lf-letter{font-size:13px;font-weight:600;color:var(--text2)}
+
+.search-bar{padding:10px 16px;border-bottom:1px solid var(--border)}
+.search-bar input{width:100%;padding:7px 14px;font-size:13px;font-family:var(--font);border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface2);color:var(--text);outline:none;transition:border-color .15s}
+.search-bar input:focus{border-color:var(--orange)}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:8px 14px;border-bottom:1px solid var(--border);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr.row-pending td{background:var(--orange-light);color:var(--orange-dark);font-weight:600}
+tr.row-assigned td{background:var(--green-light);color:var(--green-dark)}
+tr.row-ended td{background:var(--gray-light);color:var(--gray-dark)}
+
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px}
+.pill-pending{background:var(--orange-light);color:var(--orange-dark);border:1px solid var(--orange-mid)}
+.pill-assigned{background:var(--green-light);color:var(--green-dark);border:1px solid var(--green-mid)}
+.pill-ended{background:var(--gray-light);color:var(--gray-dark);border:1px solid var(--gray-mid)}
+
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--text3)}
+.empty-icon{font-size:48px;display:block;margin-bottom:1rem;opacity:.3}
+.empty-title{font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px}
+
+.last-upd{font-size:11px;color:var(--text3);text-align:right;margin-top:4px}
+.footer{text-align:center;padding:2rem;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:1rem}
+.letter-sections{padding:16px;display:flex;flex-direction:column;gap:20px}
+.letter-block{}
+.letter-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.letter-badge{width:40px;height:40px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0}
+.letter-badge.A{background:#EFF6FF;color:#1D4ED8}
+.letter-badge.B{background:#F0FDF4;color:#15803D}
+.letter-badge.C{background:#FFF7ED;color:#C2410C}
+.letter-badge.D{background:#FDF4FF;color:#7E22CE}
+.letter-badge.E{background:#FFF1F2;color:#BE123C}
+.letter-badge.F{background:#F0FDFA;color:#0F766E}
+.letter-badge.X{background:var(--surface2);color:var(--text2)}
+.letter-meta{flex:1}
+.letter-title{font-size:15px;font-weight:700;color:var(--text)}
+.letter-sub{font-size:12px;color:var(--text3);margin-top:1px}
+.letter-badges{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.routes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:8px}
+.route-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.route-card.has-pending{border-color:var(--orange-mid)}
+.route-hdr{padding:7px 11px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--surface2)}
+.route-letter{font-size:11px;font-weight:700;color:var(--text)}
+.route-stat{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.route-drivers{padding:5px;display:flex;flex-direction:column;gap:2px}
+.rd{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:6px;font-size:11px}
+.rd.st-pending{background:var(--orange-light);border:1px solid var(--orange-mid);color:var(--orange-dark);font-weight:600}
+.rd.st-assigned{background:var(--green-light);color:var(--green-dark)}
+.rd.st-ended{background:var(--gray-light);color:var(--gray-dark)}
+.rd-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd-tag{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600;flex-shrink:0;font-family:var(--mono)}
+.tag-pending{background:var(--orange-mid);color:var(--orange-dark)}
+.tag-assigned{background:var(--green-mid);color:var(--green-dark)}
+.tag-ended{background:var(--gray-mid);color:var(--gray-dark)}
+.letter-filter{display:flex;align-items:stretch;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.lf-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:68px;padding:8px 12px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s;gap:2px;user-select:none}
+.lf-btn:hover{border-color:var(--orange);background:var(--orange-light)}
+.lf-btn.active{border-color:var(--orange);background:var(--orange-light)}
+.lf-letter{font-size:20px;font-weight:700;line-height:1}
+.lf-btn.lA .lf-letter{color:#1D4ED8}
+.lf-btn.lB .lf-letter{color:#15803D}
+.lf-btn.lC .lf-letter{color:#C2410C}
+.lf-btn.lD .lf-letter{color:#7E22CE}
+.lf-btn.lE .lf-letter{color:#BE123C}
+.lf-btn.lF .lf-letter{color:#0F766E}
+.lf-btn.lX .lf-letter{color:var(--text2)}
+.lf-stats{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.lf-num{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;cursor:pointer;transition:opacity .15s,transform .1s;border:1.5px solid transparent}
+.lf-num:hover{opacity:.75;transform:scale(1.08)}
+.lf-num.active-filter{border-color:currentColor;box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+.lf-num.p{background:var(--orange-mid);color:var(--orange-dark)}
+.lf-num.a{background:var(--green-mid);color:var(--green-dark)}
+.lf-num.e{background:var(--gray-mid);color:var(--gray-dark)}
+.lf-routes{font-size:10px;color:var(--text3);margin-top:1px}
+.lf-all{min-width:52px}
+.lf-all .lf-letter{font-size:13px;font-weight:600;color:var(--text2)}
+
+@media(max-width:768px){
+  .import-grid{grid-template-columns:1fr}
+  .metrics-bar{grid-template-columns:repeat(3,1fr)}
+  .top-hub{display:none}
+}
+@media print{.top-bar{position:static}.import-section{display:none}}
+</style>
+</head>
+<body>
+
+<div style="background:#EE4D2D;width:100%;padding:18px 0;text-align:center;letter-spacing:3px">
+  <span style="color:#fff;font-size:22px;font-weight:700;font-family:'DM Sans',system-ui,sans-serif;text-transform:uppercase;letter-spacing:4px">SHOPEE — FLEET YMS</span>
+</div>
+<div class="top-bar">
+  <span class="shopee-logo">Shopee</span>
+  <span class="top-title">YMS — Check-in Motoristas</span>
+  <span class="top-hub">LM Hub_PR_SJP · LPR-24</span>
+  <span class="top-clock" id="clock">--:--:--</span>
+</div>
+
+<div class="main">
+
+  <div class="import-section" id="import-section">
+    <div class="import-collapse-bar" onclick="expandImport()">
+      <span class="icb-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importar novos arquivos
+        <span class="icb-files" id="icb-files"></span>
+      </span>
+      <span class="icb-expand">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        expandir
+      </span>
+    </div>
+    <div class="import-body">
+    <div class="sec-label">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Importar arquivos CSV
+    </div>
+
+    <div class="import-grid" style="grid-template-columns:1fr 1fr 1fr">
+
+      <!-- ATRIBUIÇÃO -->
+      <div class="drop-zone" id="zone-atrib"
+           ondragover="onDrag(event,'atrib')" ondragleave="offDrag('atrib')" ondrop="onDrop(event,'atrib')">
+        <input class="file-input" type="file" accept=".csv,.txt" onchange="onFile(event,'atrib')">
+        <div class="dz-icon" id="icon-atrib">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="dz-body">
+        <div class="dz-title">Atribuição / Escala</div>
+        <div class="dz-hint">Arraste o .csv ou clique para selecionar</div>
+        <div class="dz-filename" id="fname-atrib"></div>
+        <div class="dz-info"></div>
+        <div class="dz-cols" id="cols-atrib">
+          <div class="col-row"><label>Driver Name:</label><select id="sel-a-nome" onchange="updatePreview('atrib')"></select></div>
+          <div class="col-row"><label>Corridor-Cage/Route:</label><select id="sel-a-rota" onchange="updatePreview('atrib')"></select></div>
+          <div class="col-row"><label>Cluster:</label><select id="sel-a-cluster" onchange="updatePreview('atrib')"></select></div>
+        </div>
+        <div class="dz-preview" id="prev-atrib"></div>
+        </div><!-- /dz-body -->
+      </div>
+
+      <!-- CHECK-IN -->
+      <div class="drop-zone" id="zone-checkin"
+           ondragover="onDrag(event,'checkin')" ondragleave="offDrag('checkin')" ondrop="onDrop(event,'checkin')">
+        <input class="file-input" type="file" accept=".csv,.txt" onchange="onFile(event,'checkin')">
+        <div class="dz-icon" id="icon-checkin">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 12l2 2 4-4"/><path d="M9 6h6"/></svg>
+        </div>
+        <div class="dz-body">
+        <div class="dz-title">Check-in YMS</div>
+        <div class="dz-hint">Arraste o .csv ou clique para selecionar</div>
+        <div class="dz-filename" id="fname-checkin"></div>
+        <div class="dz-info"></div>
+        <div class="dz-cols" id="cols-checkin">
+          <div class="col-row"><label>Driver Name:</label><select id="sel-c-nome" onchange="updatePreview('checkin')"></select></div>
+          <div class="col-row"><label>Status:</label><select id="sel-c-status" onchange="updatePreview('checkin')"></select></div>
+          <div class="col-row"><label>Waiting Time:</label><select id="sel-c-wait" onchange="updatePreview('checkin')"></select></div>
+        </div>
+        <div class="dz-preview" id="prev-checkin"></div>
+        </div><!-- /dz-body -->
+      </div>
+
+      <!-- TELEFONES -->
+      <div class="drop-zone" id="zone-phone"
+           ondragover="onDrag(event,'phone')" ondragleave="offDrag('phone')" ondrop="onDrop(event,'phone')">
+        <input class="file-input" type="file" accept=".csv,.txt" onchange="onFile(event,'phone')">
+        <div class="dz-icon" id="icon-phone">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="dz-body">
+          <div class="dz-title">Telefones (opcional)</div>
+          <div class="dz-hint">Cadastro de drivers · Driver Name + Phone Number</div>
+          <div class="dz-filename" id="fname-phone"></div>
+          <div class="dz-cols" id="cols-phone">
+            <div class="col-row"><label>Driver Name:</label><select id="sel-p-nome" onchange="updatePreview('phone')"></select></div>
+            <div class="col-row"><label>Phone Number:</label><select id="sel-p-fone" onchange="updatePreview('phone')"></select></div>
+          </div>
+          <div class="dz-preview" id="prev-phone"></div>
+        </div><!-- /dz-body -->
+      </div>
+
+    </div>
+
+    <button class="btn-proc" id="btn-proc" onclick="processar()" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.63"/></svg>
+      Processar e Atualizar Dashboard
+    </button>
+    </div><!-- /import-body -->
+  </div>
+
+  <!-- METRICS -->
+  <div id="metrics-area" style="display:none">
+    <div class="metrics-bar">
+      <div class="mc mc-disabled" id="mc-tot" onclick="mcClick('all')" title="Ver lista completa"><div class="mc-lbl">Atribuídos</div><div class="mc-val" id="m-tot" style="color:var(--text)">0</div></div>
+      <div class="mc" id="mc-assigned" onclick="mcClick('assigned')" title="Filtrar: Assigned"><div class="mc-lbl">Assigned</div><div class="mc-val" id="m-assigned" style="color:var(--green)">0</div></div>
+      <div class="mc" id="mc-ended" onclick="mcClick('ended')" title="Filtrar: Ended"><div class="mc-lbl">Ended</div><div class="mc-val" id="m-ended" style="color:var(--gray)">0</div></div>
+      <div class="mc" id="mc-pend" onclick="mcClick('pending')" title="Filtrar: Pendentes"><div class="mc-lbl">Pendentes</div><div class="mc-val" id="m-pend" style="color:var(--orange)">0</div></div>
+      <div class="mc mc-disabled" title="Percentual de presença"><div class="mc-lbl">% Check-in</div><div class="mc-val" id="m-pct" style="color:var(--blue)">0%</div></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+    <div class="dash-card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="sw('reg',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Por região
+        </button>
+        <button class="tab-btn" id="tab-lst-btn" onclick="sw('lst',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Lista completa
+        </button>
+        <button class="tab-btn" id="tab-pnd-btn" onclick="sw('pnd',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Pendentes
+          <span class="badge badge-pend" id="tab-cnt">0</span>
+        </button>
+      </div>
+        <button class="tab-btn" onclick="sw('let',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h12"/><circle cx="19" cy="18" r="3"/></svg>
+          Por letra
+        </button>
+      </div>
+
+      <!-- REGIÃO -->
+      <div id="view-reg">
+        <div class="view-header">
+          <span class="view-title">Visão por cluster / região</span>
+          <div class="badges-row">
+            <span class="badge badge-pend" id="b-pend">0 pendentes</span>
+            <span class="badge badge-ok" id="b-assigned">0 assigned</span>
+            <span class="badge badge-done" id="b-ended">0 ended</span>
+          </div>
+        </div>
+        <div class="region-grid" id="reg-grid"></div>
+      </div>
+
+      <!-- LISTA COMPLETA -->
+      <div id="view-lst" style="display:none">
+        <div class="search-bar"><input type="text" id="search-lst" placeholder="Buscar driver, rota ou cluster..." oninput="filterLst()"></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:110px">Status</th>
+              <th>Driver</th>
+              <th style="width:130px">Rota</th>
+              <th style="width:130px">Cluster</th>
+              <th style="width:110px">Waiting Time</th>
+            </tr></thead>
+            <tbody id="tbody-lst"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PENDENTES -->
+      <div id="view-pnd" style="display:none">
+        <div class="view-header">
+          <span class="view-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Drivers sem check-in
+          </span>
+          <span class="badge badge-pend" id="b-pend2">0 pendentes</span>
+        </div>
+        <div class="search-bar"><input type="text" id="search-pnd" placeholder="Buscar driver ou cluster..." oninput="filterPnd()"></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Driver</th>
+              <th style="width:150px">Rota</th>
+              <th style="width:150px">Cluster</th>
+              <th style="width:110px">Situação</th>
+            </tr></thead>
+            <tbody id="tbody-pnd"></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- POR LETRA -->
+      <div id="view-let" style="display:none">
+        <div class="view-header">
+          <span class="view-title">Visão por letra de rota</span>
+          <div class="badges-row">
+            <span class="badge badge-pend" id="b-pend3">0 pendentes</span>
+            <span class="badge badge-ok" id="b-assigned3">0 assigned</span>
+            <span class="badge badge-done" id="b-ended3">0 ended</span>
+          </div>
+        </div>
+        <div class="letter-filter" id="letter-filter"></div>
+        <div class="letter-sections" id="letter-sections"></div>
+      </div>
+    </div>
+
+    <div class="last-upd" id="last-upd"></div>
+  </div>
+
+  <div id="empty-st" class="empty-state">
+    <span class="empty-icon">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8l5 3-5 3V8z"/><path d="M4 19h16"/></svg>
+    </span>
+    <div class="empty-title">Nenhum dado importado</div>
+    <div style="font-size:13px;color:var(--text3)">Importe os arquivos CSV de Atribuição e Check-in YMS para visualizar o status.</div>
+  </div>
+
+</div>
+
+<div class="footer">YMS Dashboard · Shopee <strong style="letter-spacing:1px">LPR24</strong> · LM Hub_PR_São José dos Pinhais · JaquelineGarcia</div>
+
+<script>
+const COLORS=['#3B82F6','#8B5CF6','#F59E0B','#10B981','#EF4444','#06B6D4','#EC4899','#6366F1','#84CC16','#F97316','#14B8A6','#FB923C'];
+let rawData={atrib:null,checkin:null,phone:null};
+let phoneMap=new Map();
+let allDrivers=[];
+let lstData=[];
+let pndData=[];
+
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=
+    n.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})+'  '+n.toLocaleTimeString('pt-BR');
+}
+tick();setInterval(tick,1000);
+
+function parseCSV(text){
+  const t=text.charCodeAt(0)===0xFEFF?text.slice(1):text;
+  if(!t.trim())return{headers:[],rows:[]};
+  const sep=t.indexOf(';')!==-1&&t.indexOf(';')<(t.indexOf(',')!==-1?t.indexOf(','):9999)?';':(t.split('\n')[0].includes('\t')?'\t':',');
+  function splitLine(line){
+    const cols=[];let cur='';let inQ=false;
+    for(let i=0;i<line.length;i++){
+      const c=line[i];
+      if(c==='"'){
+        if(inQ&&line[i+1]==='"'){cur+='"';i++;}
+        else{inQ=!inQ;}
+      } else if(c===sep&&!inQ){
+        cols.push(cur.trim());cur='';
+      } else {cur+=c;}
+    }
+    cols.push(cur.trim());
+    return cols;
+  }
+  const lines=t.split(/\r?\n/);
+  const headers=splitLine(lines[0]);
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const line=lines[i].trim();
+    if(!line)continue;
+    const cols=splitLine(line);
+    const obj={};
+    headers.forEach((h,j)=>{obj[h]=(cols[j]||'').trim();});
+    if(Object.values(obj).some(v=>v))rows.push(obj);
+  }
+  return{headers,rows};
+}
+
+function onDrag(e,t){e.preventDefault();document.getElementById('zone-'+t).classList.add('drag-over');}
+function offDrag(t){document.getElementById('zone-'+t).classList.remove('drag-over');}
+function onDrop(e,t){e.preventDefault();offDrag(t);readFile(e.dataTransfer.files[0],t);}
+function onFile(e,t){readFile(e.target.files[0],t);}
+
+function readFile(file,type){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    rawData[type]=parseCSV(ev.target.result);
+    const h=rawData[type].headers;
+    const cnt=rawData[type].rows.length;
+    document.getElementById('fname-'+type).textContent=file.name+' — '+cnt+' registros';
+    document.getElementById('zone-'+type).classList.add('loaded');
+    document.getElementById('cols-'+type).classList.add('visible');
+
+    if(type==='atrib'){
+      popSel('sel-a-nome',h,guess(h,['driver name','driver id','driver','motorista','nome']));
+      popSel('sel-a-rota',h,guess(h,['corridor-cage/route','corridor','route','rota','corredor']));
+      popSel('sel-a-cluster',h,guess(h,['cluster','região','regiao','zona','setor','area']));
+    } else if(type==='phone'){
+      popSel('sel-p-nome',h,guess(h,['driver name','driver','nome','motorista']));
+      popSel('sel-p-fone',h,guess(h,['phone number','phone','telefone','celular','fone']));
+    } else {
+      popSel('sel-c-nome',h,guess(h,['driver name','driver','motorista','nome']));
+      popSel('sel-c-status',h,guess(h,['status','estado','situacao']));
+      popSel('sel-c-wait',h,guess(h,['waiting time','espera','tempo']));
+    }
+    updatePreview(type);
+    checkReady();
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+function guess(headers,kw){
+  const hl=headers.map(h=>h.toLowerCase().trim());
+  // 1) exact match first
+  let idx=hl.findIndex(h=>kw.some(k=>h===k.toLowerCase()));
+  if(idx>=0)return idx;
+  // 2) starts-with match
+  idx=hl.findIndex(h=>kw.some(k=>h.startsWith(k.toLowerCase())));
+  if(idx>=0)return idx;
+  // 3) partial match (fallback)
+  idx=hl.findIndex(h=>kw.some(k=>h.includes(k.toLowerCase())));
+  return idx>=0?idx:0;
+}
+
+function popSel(id,headers,def){
+  const el=document.getElementById(id);
+  el.innerHTML='<option value="-1">(nenhuma)</option>'+
+    headers.map((h,i)=>`<option value="${i}"${i===def?' selected':''}>${h||'Col '+(i+1)}</option>`).join('');
+}
+
+function updatePreview(type){
+  if(!rawData[type])return;
+  const rows=rawData[type].rows;
+  if(!rows.length)return;
+  const h=rawData[type].headers;
+  const sample=rows.slice(0,2);
+  let keys=[];
+  if(type==='atrib'){
+    keys=[
+      colKey(h,parseInt(document.getElementById('sel-a-nome').value)),
+      colKey(h,parseInt(document.getElementById('sel-a-rota').value)),
+      colKey(h,parseInt(document.getElementById('sel-a-cluster').value))
+    ];
+  } else if(type==='phone'){
+    keys=[
+      colKey(h,parseInt(document.getElementById('sel-p-nome').value)),
+      colKey(h,parseInt(document.getElementById('sel-p-fone').value))
+    ];
+  } else {
+    keys=[
+      colKey(h,parseInt(document.getElementById('sel-c-nome').value)),
+      colKey(h,parseInt(document.getElementById('sel-c-status').value)),
+      colKey(h,parseInt(document.getElementById('sel-c-wait').value))
+    ];
+  }
+  const txt='Prévia: '+sample.map(r=>keys.map(k=>getVal(r,k)).filter(Boolean).join(' | ')).join('  /  ');
+  document.getElementById('prev-'+type).textContent=txt;
+}
+
+function checkReady(){
+  document.getElementById('btn-proc').disabled=!(rawData.atrib&&rawData.checkin);
+}
+
+function norm(s){
+  return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,'').trim();
+}
+
+function matchNames(a,b){
+  const na=norm(a),nb=norm(b);
+  if(!na||!nb)return false;
+  if(na===nb)return true;
+  if(na.includes(nb)||nb.includes(na))return true;
+  const wa=na.split(' ').filter(w=>w.length>2);
+  const wb=nb.split(' ').filter(w=>w.length>2);
+  const shared=wa.filter(w=>wb.includes(w));
+  return shared.length>=Math.min(2,Math.min(wa.length,wb.length));
+}
+
+function colKey(headers,idx){return idx>=0&&idx<headers.length?headers[idx]:null;}
+function getVal(row,key){return(key&&row[key]!=null)?(row[key]+'').trim():'';}
+
+function processar(){
+  if(!rawData.atrib||!rawData.checkin)return;
+
+  const ha=rawData.atrib.headers;
+  const hc=rawData.checkin.headers;
+
+  const ka_nome =colKey(ha,parseInt(document.getElementById('sel-a-nome').value));
+  const ka_rota =colKey(ha,parseInt(document.getElementById('sel-a-rota').value));
+  const ka_clust=colKey(ha,parseInt(document.getElementById('sel-a-cluster').value));
+  const kc_nome =colKey(hc,parseInt(document.getElementById('sel-c-nome').value));
+  const kc_stat =colKey(hc,parseInt(document.getElementById('sel-c-status').value));
+  const kc_wait =colKey(hc,parseInt(document.getElementById('sel-c-wait').value));
+
+  // Phone map
+  phoneMap=new Map();
+  if(rawData.phone){
+    const hp=rawData.phone.headers;
+    const kp_nome=colKey(hp,parseInt(document.getElementById('sel-p-nome').value));
+    const kp_fone=colKey(hp,parseInt(document.getElementById('sel-p-fone').value));
+    rawData.phone.rows.forEach(r=>{
+      const nome=getVal(r,kp_nome);
+      const fone=getVal(r,kp_fone).replace(/\D/g,'');
+      if(nome&&fone) phoneMap.set(norm(nome),fone);
+    });
+  }
+
+  // Atribuição: deduplica por nome, lê cluster pelo nome da coluna
+  const seenAtrib=new Set();
+  const atrib=rawData.atrib.rows.map(r=>({
+    nome:getVal(r,ka_nome),
+    rota:getVal(r,ka_rota)||'—',
+    cluster:getVal(r,ka_clust)||'Sem cluster'
+  })).filter(d=>{
+    if(!d.nome)return false;
+    const k=norm(d.nome);
+    if(seenAtrib.has(k))return false;
+    seenAtrib.add(k);return true;
+  });
+
+  // Check-in: deduplica por nome, pega último status
+  const checkinMap=new Map();
+  rawData.checkin.rows.forEach(r=>{
+    const nome=getVal(r,kc_nome);
+    if(!nome)return;
+    const status=getVal(r,kc_stat).toLowerCase();
+    const wait=getVal(r,kc_wait);
+    const k=norm(nome);
+    const prev=checkinMap.get(k);
+    if(!prev||status==='ended'){
+      checkinMap.set(k,{nome,status,wait});
+    }
+  });
+
+  allDrivers=atrib.map(d=>{
+    const k=norm(d.nome);
+    // phone lookup with fuzzy match
+    let phone='';
+    if(phoneMap.size>0){
+      if(phoneMap.has(k)){phone=phoneMap.get(k);}
+      else{
+        const found=[...phoneMap.entries()].find(([mk])=>matchNames(d.nome,mk));
+        if(found)phone=found[1];
+      }
+    }
+    const match=[...checkinMap.entries()].find(([mk])=>matchNames(d.nome,mk));
+    if(match){
+      const ci=match[1];
+      const st=ci.status==='ended'?'ended':'assigned';
+      return{...d,checkin:true,status:st,wait:ci.wait,phone};
+    }
+    return{...d,checkin:false,status:'pending',wait:'',phone};
+  });
+
+  lstData=[...allDrivers].sort((a,b)=>{
+    const order={pending:0,assigned:1,ended:2};
+    return(order[a.status]||0)-(order[b.status]||0)||a.cluster.localeCompare(b.cluster)||a.nome.localeCompare(b.nome);
+  });
+  pndData=allDrivers.filter(d=>d.status==='pending').sort((a,b)=>a.cluster.localeCompare(b.cluster)||a.nome.localeCompare(b.nome));
+
+  renderMetrics();
+  renderRegioes();
+  renderLst(lstData);
+  renderPnd(pndData);
+  renderLetras();
+
+  document.getElementById('metrics-area').style.display='block';
+  document.getElementById('empty-st').style.display='none';
+  document.getElementById('last-upd').textContent='Última atualização: '+new Date().toLocaleTimeString('pt-BR')+' — '+allDrivers.length+' drivers processados';
+  // Collapse import section
+  collapseImport();
+}
+
+function collapseImport(){
+  const sec=document.getElementById('import-section');
+  sec.classList.add('collapsed');
+  // show filenames in bar
+  const fa=document.getElementById('fname-atrib').textContent;
+  const fc=document.getElementById('fname-checkin').textContent;
+  const parts=[fa,fc].filter(Boolean).map(f=>f.split('—')[0].trim());
+  document.getElementById('icb-files').textContent=parts.length?'('+parts.join(' + ')+ ')':'';
+}
+
+function expandImport(){
+  document.getElementById('import-section').classList.remove('collapsed');
+}
+
+function renderMetrics(){
+  const tot=allDrivers.length;
+  const assigned=allDrivers.filter(d=>d.status==='assigned').length;
+  const ended=allDrivers.filter(d=>d.status==='ended').length;
+  const pend=allDrivers.filter(d=>d.status==='pending').length;
+  const pct=tot>0?Math.round(((assigned+ended)/tot)*100):0;
+  document.getElementById('m-tot').textContent=tot;
+  document.getElementById('m-assigned').textContent=assigned;
+  document.getElementById('m-ended').textContent=ended;
+  document.getElementById('m-pend').textContent=pend;
+  document.getElementById('m-pct').textContent=pct+'%';
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('tab-cnt').textContent=pend;
+  document.getElementById('b-pend').textContent=pend+' pendentes';
+  document.getElementById('b-pend2').textContent=pend+' pendentes';
+  document.getElementById('b-assigned').textContent=assigned+' assigned';
+  document.getElementById('b-ended').textContent=ended+' ended';
+}
+
+function statusLabel(st){
+  if(st==='assigned')return'<span class="status-pill pill-assigned"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Assigned</span>';
+  if(st==='ended')return'<span class="status-pill pill-ended"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 12 11 14 15 10"/></svg>Ended</span>';
+  return'<span class="status-pill pill-pending"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>Pendente</span>';
+}
+
+function statusIcon(st){
+  if(st==='assigned')return'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>';
+  if(st==='ended')return'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 12 11 14 15 10"/></svg>';
+  return'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>';
+}
+
+function renderRegioes(){
+  const clusters=[...new Set(allDrivers.map(d=>d.cluster))].sort();
+  const g=document.getElementById('reg-grid');
+  g.innerHTML='';
+  clusters.forEach((cl,idx)=>{
+    const drv=allDrivers.filter(d=>d.cluster===cl);
+    const ok=drv.filter(d=>d.checkin).length;
+    const color=COLORS[idx%COLORS.length];
+    const card=document.createElement('div');
+    card.className='reg-card';
+    card.innerHTML=`
+      <div class="reg-hdr">
+        <span class="reg-name"><span class="reg-dot" style="background:${color}"></span>${cl}</span>
+        <span class="reg-count">${ok}/${drv.length}</span>
+      </div>
+      <div class="driver-list">
+        ${drv.map(d=>`
+          <div class="dr-row st-${d.status}">
+            ${statusIcon(d.status)}
+            <span class="dr-name" title="${d.nome}">${d.nome}</span>
+            <span class="dr-sub" title="${d.rota}">${d.rota}</span>
+            <span class="dr-tag tag-${d.status}">${d.status==='assigned'?(d.wait||'OK'):d.status==='ended'?'Finalizado':'Aguardando'}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    g.appendChild(card);
+  });
+}
+
+function renderLst(data){
+  document.getElementById('tbody-lst').innerHTML=data.map(d=>`
+    <tr class="row-${d.status}">
+      <td>${statusLabel(d.status)}</td>
+      <td title="${d.nome}">${d.nome}</td>
+      <td title="${d.rota}">${d.rota}</td>
+      <td>${d.cluster}</td>
+      <td style="font-family:var(--mono)">${d.wait||'—'}</td>
+    </tr>
+  `).join('');
+}
+
+function buildWaLink(phone, nome){
+  if(!phone) return '';
+  const primeiro = nome.split(' ')[0];
+  const msg = 'Olá ' + primeiro + ', seu check-in no hub ainda não foi registrado. Qual sua previsão de chegada? Informamos que caso não compareça nos próximos 15 minutos e realize o check-in, sua rota pode ser repassada. Att, Shopee Logística.';
+  const url = 'https://wa.me/55' + phone + '?text=' + encodeURIComponent(msg);
+  return `<a class="wa-btn" href="${url}" target="_blank" rel="noopener">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L0 24l6.335-1.652A11.954 11.954 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.659-.52-5.17-1.428l-.371-.219-3.818.996.998-3.714-.24-.383A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    WhatsApp
+  </a>`;
+}
+
+function renderPnd(data){
+  const tb=document.getElementById('tbody-pnd');
+  if(!data.length){
+    tb.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:3rem;color:var(--green)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block;margin:0 auto 8px"><polyline points="20 6 9 17 4 12"/></svg>
+      Todos os drivers realizaram check-in!
+    </td></tr>`;
+    return;
+  }
+  tb.innerHTML=data.map(d=>`
+    <tr class="row-pending">
+      <td title="${d.nome}">
+        <strong>${d.nome}</strong>
+        ${d.phone ? `<div class="dr-phone-row">
+          <span class="phone-tag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            ${d.phone}
+          </span>
+          ${buildWaLink(d.phone, d.nome)}
+        </div>` : ''}
+      </td>
+      <td>${d.rota}</td>
+      <td>${d.cluster}</td>
+      <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+        Não realizado
+      </span></td>
+    </tr>
+  `).join('');
+}
+
+function filterLst(){
+  const q=norm(document.getElementById('search-lst').value);
+  renderLst(q?lstData.filter(d=>norm(d.nome).includes(q)||norm(d.cluster).includes(q)||norm(d.rota).includes(q)):lstData);
+}
+
+function filterPnd(){
+  const q=norm(document.getElementById('search-pnd').value);
+  renderPnd(q?pndData.filter(d=>norm(d.nome).includes(q)||norm(d.cluster).includes(q)):pndData);
+}
+
+function sortRoutes(a,b){
+  const na=parseInt((a.match(/\d+/)||[0])[0]);
+  const nb=parseInt((b.match(/\d+/)||[0])[0]);
+  return na-nb;
+}
+
+function routeBlock(letter,drvsLetter){
+  const routes=[...new Set(drvsLetter.map(d=>d.rota))].sort(sortRoutes);
+  const lPend=drvsLetter.filter(d=>d.status==='pending').length;
+  const lAssigned=drvsLetter.filter(d=>d.status==='assigned').length;
+  const lEnded=drvsLetter.filter(d=>d.status==='ended').length;
+  const lcls='ABCDEF'.includes(letter)?letter:'X';
+  const block=document.createElement('div');
+  block.className='letter-block';
+  block.id='block-'+letter;
+  block.innerHTML=`
+    <div class="letter-header">
+      <div class="letter-badge ${lcls}">${letter}</div>
+      <div class="letter-meta">
+        <div class="letter-title">Rotas ${letter} <span style="font-weight:400;font-size:13px;color:var(--text3)">${routes.length} rotas · ${drvsLetter.length} drivers</span></div>
+        <div class="letter-sub">${letter}-1 até ${letter}-${parseInt(routes[routes.length-1]?.match(/\d+/)?.[0]||0)}</div>
+      </div>
+      <div class="letter-badges">
+        ${lPend>0?`<span class="badge badge-pend">${lPend} pendentes</span>`:''}
+        ${lAssigned>0?`<span class="badge badge-ok">${lAssigned} assigned</span>`:''}
+        ${lEnded>0?`<span class="badge badge-done">${lEnded} ended</span>`:''}
+      </div>
+    </div>
+    <div class="routes-grid" id="rg-${letter}"></div>
+  `;
+  const grid=block.querySelector('#rg-'+letter);
+  routes.forEach(route=>{
+    const drvsRoute=drvsLetter.filter(d=>d.rota===route);
+    const hasPend=drvsRoute.some(d=>d.status==='pending');
+    const okCnt=drvsRoute.filter(d=>d.checkin).length;
+    const card=document.createElement('div');
+    card.className='route-card'+(hasPend?' has-pending':'');
+    card.innerHTML=`
+      <div class="route-hdr">
+        <span class="route-letter">${route}</span>
+        <span class="route-stat">${okCnt}/${drvsRoute.length}</span>
+      </div>
+      <div class="route-drivers">
+        ${drvsRoute.map(d=>`
+          <div class="rd st-${d.status}">
+            ${d.status==='assigned'
+              ?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>'
+              :d.status==='ended'
+              ?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 12 11 14 15 10"/></svg>'
+              :'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>'
+            }
+            <span class="rd-name" title="${d.nome}">${d.nome}</span>
+            <span class="rd-tag tag-${d.status}">${d.status==='assigned'?(d.wait||'OK'):d.status==='ended'?'OK':'Aguar.'}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  return block;
+}
+
+// letterFilter = {letter:'A'|'ALL', status:'pending'|'assigned'|'ended'|'ALL'}
+let letterFilter={letter:'ALL',status:'ALL'};
+
+function applyFilter(newLetter, newStatus){
+  // toggle logic: clicking active filter resets to ALL
+  if(newLetter!==null){
+    letterFilter.letter = (letterFilter.letter===newLetter && newStatus===null) ? 'ALL' : newLetter;
+    if(newLetter==='ALL') letterFilter.status='ALL';
+  }
+  if(newStatus!==null){
+    letterFilter.status = (letterFilter.status===newStatus) ? 'ALL' : newStatus;
+  }
+
+  // update letter button active states
+  document.querySelectorAll('.lf-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.letter===letterFilter.letter || (letterFilter.letter==='ALL' && b.dataset.letter==='ALL'));
+  });
+
+  // update num pill active states
+  document.querySelectorAll('.lf-num').forEach(n=>{
+    n.classList.toggle('active-filter', n.dataset.status===letterFilter.status);
+  });
+
+  // filter blocks and route cards
+  document.querySelectorAll('.letter-block').forEach(block=>{
+    const bl=block.id.replace('block-','');
+    const letterMatch=(letterFilter.letter==='ALL'||letterFilter.letter===bl);
+    block.style.display=letterMatch?'block':'none';
+    if(!letterMatch)return;
+    // filter individual route cards by status
+    block.querySelectorAll('.route-card').forEach(card=>{
+      if(letterFilter.status==='ALL'){card.style.display='';return;}
+      const hasStatus=card.querySelector('.rd.st-'+letterFilter.status);
+      card.style.display=hasStatus?'':'none';
+    });
+    // filter individual driver rows inside visible cards
+    block.querySelectorAll('.rd').forEach(row=>{
+      row.style.display=(letterFilter.status==='ALL'||row.classList.contains('st-'+letterFilter.status))?'':'none';
+    });
+  });
+}
+
+function renderLetras(){
+  const letters=[...new Set(allDrivers.map(d=>(d.rota||'').charAt(0).toUpperCase()).filter(l=>/[A-Z]/.test(l)))].sort();
+  const sec=document.getElementById('letter-sections');
+  const flt=document.getElementById('letter-filter');
+  sec.innerHTML='';
+  flt.innerHTML='';
+  letterFilter={letter:'ALL',status:'ALL'};
+
+  const pend=allDrivers.filter(d=>d.status==='pending').length;
+  const assigned=allDrivers.filter(d=>d.status==='assigned').length;
+  const ended=allDrivers.filter(d=>d.status==='ended').length;
+  document.getElementById('b-pend3').textContent=pend+' pendentes';
+  document.getElementById('b-assigned3').textContent=assigned+' assigned';
+  document.getElementById('b-ended3').textContent=ended+' ended';
+
+  function makeNumPill(cls,count,status,label){
+    if(count===0)return'';
+    return `<span class="lf-num ${cls}" data-status="${status}" title="Filtrar: ${label}" onclick="event.stopPropagation();applyFilter(null,'${status}')">${count}</span>`;
+  }
+
+  // "Todas" button
+  const allBtn=document.createElement('div');
+  allBtn.className='lf-btn lf-all active';
+  allBtn.dataset.letter='ALL';
+  allBtn.innerHTML=`
+    <span class="lf-letter">Todas</span>
+    <div class="lf-stats">
+      ${makeNumPill('p',pend,'pending','Pendentes')}
+      ${makeNumPill('a',assigned,'assigned','Assigned')}
+      ${makeNumPill('e',ended,'ended','Ended')}
+    </div>
+    <span class="lf-routes">${allDrivers.length} drivers</span>
+  `;
+  allBtn.onclick=()=>applyFilter('ALL',null);
+  flt.appendChild(allBtn);
+
+  // one button per letter
+  letters.forEach(letter=>{
+    const drv=allDrivers.filter(d=>(d.rota||'').charAt(0).toUpperCase()===letter);
+    const lP=drv.filter(d=>d.status==='pending').length;
+    const lA=drv.filter(d=>d.status==='assigned').length;
+    const lE=drv.filter(d=>d.status==='ended').length;
+    const routes=[...new Set(drv.map(d=>d.rota))];
+    const lcls='ABCDEF'.includes(letter)?'l'+letter:'lX';
+    const btn=document.createElement('div');
+    btn.className=`lf-btn ${lcls}`;
+    btn.dataset.letter=letter;
+    btn.innerHTML=`
+      <span class="lf-letter">${letter}</span>
+      <div class="lf-stats">
+        ${makeNumPill('p',lP,'pending','Pendentes')}
+        ${makeNumPill('a',lA,'assigned','Assigned')}
+        ${makeNumPill('e',lE,'ended','Ended')}
+      </div>
+      <span class="lf-routes">${routes.length} rotas</span>
+    `;
+    btn.onclick=()=>applyFilter(letter,null);
+    flt.appendChild(btn);
+
+    sec.appendChild(routeBlock(letter,drv));
+  });
+}
+
+function mcClick(status){
+  // clear mc active states
+  document.querySelectorAll('.mc').forEach(m=>m.classList.remove('mc-active'));
+
+  if(status==='all'){
+    // go to lista completa, no filter
+    const btn=document.querySelector('.tab-btn:nth-child(2)');
+    sw('lst',btn);
+    document.getElementById('search-lst').value='';
+    renderLst(lstData);
+    document.getElementById('mc-tot').classList.add('mc-active');
+    return;
+  }
+
+  if(status==='pending'){
+    // go to Pendentes tab
+    const btn=document.querySelector('#tab-pnd-btn');
+    sw('pnd',btn);
+    document.getElementById('mc-pend').classList.add('mc-active');
+    return;
+  }
+
+  // assigned or ended — go to lista completa filtered by status
+  const btn=document.querySelector('#tab-lst-btn');
+  sw('lst',btn);
+  const filtered=lstData.filter(d=>d.status===status);
+  renderLst(filtered);
+  document.getElementById('search-lst').value='';
+  if(status==='assigned') document.getElementById('mc-assigned').classList.add('mc-active');
+  if(status==='ended') document.getElementById('mc-ended').classList.add('mc-active');
+}
+
+function sw(view,el){
+  ['reg','lst','pnd','let'].forEach(v=>document.getElementById('view-'+v).style.display=v===view?'block':'none');
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  // reset list filter when navigating manually via tabs
+  if(view==='lst'){renderLst(lstData);document.getElementById('search-lst').value='';}
+  document.querySelectorAll('.mc').forEach(m=>m.classList.remove('mc-active'));
+}
+</script>
+</body>
+</html>
