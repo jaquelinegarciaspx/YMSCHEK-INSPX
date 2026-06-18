@@ -19,14 +19,7 @@
   --radius:8px;--radius-lg:12px;
   --font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
 }
-@media(prefers-color-scheme:dark){:root{
-  --bg:#1A1A18;--surface:#242422;--surface2:#2C2C2A;
-  --border:rgba(255,255,255,0.10);--border2:rgba(255,255,255,0.18);
-  --text:#F0EFE8;--text2:#A8A8A0;--text3:#6A6A64;
-  --green-light:#0D2818;--green-mid:#15532A;--green-dark:#4ADE80;
-  --gray-light:#1F2937;--gray-mid:#374151;--gray-dark:#9CA3AF;
-  --orange-light:#2A1208;--orange-mid:#6B2010;--orange-dark:#FCA07A;
-}}
+/* dark mode disabled — always light */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 
@@ -50,22 +43,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .import-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 
-.drop-zone{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:18px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;display:flex;flex-direction:row;align-items:center;gap:14px}
+.drop-zone{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:12px 14px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;display:flex;flex-direction:column;gap:0;width:100%}
 .drop-zone:hover,.drop-zone.drag-over{border-color:var(--orange);background:var(--orange-light)}
 .drop-zone.loaded{border-style:solid;border-color:var(--green);background:var(--green-light)}
 .file-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.dz-icon{font-size:28px;color:var(--text3);transition:color .2s;flex-shrink:0}
+.dz-top{display:flex;align-items:center;gap:12px;width:100%}
+.dz-icon{color:var(--text3);transition:color .2s;flex-shrink:0}
 .drop-zone.loaded .dz-icon{color:var(--green)}
-.dz-body{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:0}
-.dz-title{font-size:13px;font-weight:600;color:var(--text)}
-.dz-hint{font-size:11px;color:var(--text3)}
-.dz-filename{font-size:11px;font-weight:500;color:var(--green);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
-.dz-cols{display:none;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);width:100%;text-align:left}
-.dz-cols.visible{display:block}
-.col-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
-.col-row label{font-size:11px;color:var(--text2);font-weight:500;min-width:110px}
+.dz-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.dz-hint{display:none}
+.dz-filename{display:none}
+.dz-cols{display:none!important}
+.dz-cols.visible{display:none!important}
+.col-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.col-row label{font-size:11px;color:var(--text2);font-weight:500;min-width:120px;flex-shrink:0}
 .col-row select{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);cursor:pointer;flex:1;min-width:0}
-.dz-preview{font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.dz-preview{display:none}
 .dz-info{display:none}
 
 .btn-proc{width:100%;padding:9px;background:var(--orange);color:#fff;font-size:14px;font-weight:600;font-family:var(--font);border:none;border-radius:var(--radius);cursor:pointer;letter-spacing:.3px;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -73,7 +66,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-proc:active{transform:scale(.99)}
 .btn-proc:disabled{opacity:.4;cursor:not-allowed}
 
-.metrics-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1rem}
+.metrics-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:1rem}
 .mc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
 .mc:hover{border-color:var(--orange);background:var(--orange-light)}
 .mc.mc-active{border-color:var(--orange);background:var(--orange-light)}
@@ -83,6 +76,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .phone-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:1px 8px;flex-shrink:0}
 .wa-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:#25D366;color:#fff;text-decoration:none;flex-shrink:0;transition:opacity .15s}
 .wa-btn:hover{opacity:.85}
+.eta-wrap{display:flex;align-items:center;gap:6px;margin-top:5px}
+.eta-input{font-size:11px;font-family:var(--font);padding:3px 8px;border-radius:6px;border:1.5px solid var(--orange-mid);background:#fff;color:var(--text);width:100px;outline:none}
+.eta-input:focus{border-color:var(--orange)}
+.eta-input::placeholder{color:var(--text3)}
+.eta-saved{font-size:10px;color:var(--green);font-weight:600;display:none}
 .dr-phone-row{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
 .mc-val{font-size:28px;font-weight:600;line-height:1}
 
@@ -90,10 +88,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .prog-fill{height:100%;border-radius:99px;transition:width .6s ease;background:var(--green)}
 
 .dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1rem}
-.tabs{display:flex;padding:0 16px;border-bottom:1px solid var(--border);background:var(--surface)}
-.tab-btn{padding:11px 16px;font-size:13px;font-weight:500;font-family:var(--font);color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;transition:color .15s}
-.tab-btn:hover{color:var(--text2)}
-.tab-btn.active{color:var(--orange);border-bottom-color:var(--orange);font-weight:600}
+.tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;padding:8px 12px;gap:6px;border-bottom:1px solid var(--border);background:var(--surface2);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tab-btn{padding:6px 12px;font-size:12px;font-weight:500;font-family:var(--font);color:var(--text2);cursor:pointer;border:1.5px solid var(--border2);background:var(--surface);border-radius:99px;display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tab-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-light)}
+.tab-btn.active{color:#fff;background:var(--orange);border-color:var(--orange);font-weight:600}
+.tab-btn.active svg{stroke:#fff}
 
 .view-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .view-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
@@ -120,6 +119,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .tag-pending{background:var(--orange-mid);color:var(--orange-dark)}
 .tag-assigned{background:var(--green-mid);color:var(--green-dark)}
 .tag-ended{background:var(--gray-mid);color:var(--gray-dark)}
+.tag-alert{background:#FEF9C3;color:#854D0E}
+.pill-alert{background:#FEF9C3;color:#854D0E;border:1px solid #FDE047}
+.row-alert td{background:#FFFBEB}
+.dr-row.st-alert{background:#FFFBEB;border:1px solid #FDE047;color:#854D0E;font-weight:600}
+.alert-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;vertical-align:middle;margin-left:4px}
 .letter-filter{display:flex;align-items:stretch;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .lf-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:68px;padding:8px 12px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s;gap:2px;user-select:none}
 .lf-btn:hover{border-color:var(--orange);background:var(--orange-light)}
@@ -198,6 +202,11 @@ tr.row-ended td{background:var(--gray-light);color:var(--gray-dark)}
 .tag-pending{background:var(--orange-mid);color:var(--orange-dark)}
 .tag-assigned{background:var(--green-mid);color:var(--green-dark)}
 .tag-ended{background:var(--gray-mid);color:var(--gray-dark)}
+.tag-alert{background:#FEF9C3;color:#854D0E}
+.pill-alert{background:#FEF9C3;color:#854D0E;border:1px solid #FDE047}
+.row-alert td{background:#FFFBEB}
+.dr-row.st-alert{background:#FFFBEB;border:1px solid #FDE047;color:#854D0E;font-weight:600}
+.alert-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;vertical-align:middle;margin-left:4px}
 .letter-filter{display:flex;align-items:stretch;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .lf-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:68px;padding:8px 12px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s;gap:2px;user-select:none}
 .lf-btn:hover{border-color:var(--orange);background:var(--orange-light)}
@@ -231,13 +240,18 @@ tr.row-ended td{background:var(--gray-light);color:var(--gray-dark)}
 </head>
 <body>
 
-<div style="background:#EE4D2D;width:100%;padding:18px 0;text-align:center;letter-spacing:3px">
+<div style="background:#EE4D2D;width:100%;padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;flex-direction:column;gap:2px">
+    <div style="font-size:10px;color:rgba(255,255,255,0.6);font-family:'DM Sans',system-ui,sans-serif;letter-spacing:.5px">Desenvolvido por</div>
+    <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);font-family:'DM Sans',system-ui,sans-serif;letter-spacing:.5px">Jaqueline Garcia</div>
+  </div>
   <span style="color:#fff;font-size:22px;font-weight:700;font-family:'DM Sans',system-ui,sans-serif;text-transform:uppercase;letter-spacing:4px">SHOPEE — FLEET YMS</span>
+  <div style="width:140px"></div>
 </div>
 <div class="top-bar">
   <span class="shopee-logo">Shopee</span>
   <span class="top-title">YMS — Check-in Motoristas</span>
-  <span class="top-hub">LM Hub_PR_SJP · LPR-24</span>
+  <input id="op-name" class="top-hub" style="cursor:text;min-width:160px;border:1.5px dashed var(--border2);outline:none;background:transparent;" value="LM Hub_PR_SJP · LPR-24" placeholder="Digite a operação..." title="Clique para editar" onfocus="this.style.borderStyle='solid';this.style.borderColor='var(--orange)'" onblur="this.style.borderStyle='dashed';this.style.borderColor='var(--border2)'">
   <span class="top-clock" id="clock">--:--:--</span>
 </div>
 
@@ -267,61 +281,65 @@ tr.row-ended td{background:var(--gray-light);color:var(--gray-dark)}
       <div class="drop-zone" id="zone-atrib"
            ondragover="onDrag(event,'atrib')" ondragleave="offDrag('atrib')" ondrop="onDrop(event,'atrib')">
         <input class="file-input" type="file" accept=".csv,.txt" onchange="onFile(event,'atrib')">
-        <div class="dz-icon" id="icon-atrib">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <div class="dz-top">
+          <div class="dz-icon" id="icon-atrib">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div>
+            <div class="dz-title">Atribuição / Escala</div>
+            <div class="dz-hint" id="hint-atrib">Arraste o .csv ou clique para selecionar</div>
+            <div class="dz-filename" id="fname-atrib"></div>
+          </div>
         </div>
-        <div class="dz-body">
-        <div class="dz-title">Atribuição / Escala</div>
-        <div class="dz-hint">Arraste o .csv ou clique para selecionar</div>
-        <div class="dz-filename" id="fname-atrib"></div>
-        <div class="dz-info"></div>
         <div class="dz-cols" id="cols-atrib">
           <div class="col-row"><label>Driver Name:</label><select id="sel-a-nome" onchange="updatePreview('atrib')"></select></div>
           <div class="col-row"><label>Corridor-Cage/Route:</label><select id="sel-a-rota" onchange="updatePreview('atrib')"></select></div>
           <div class="col-row"><label>Cluster:</label><select id="sel-a-cluster" onchange="updatePreview('atrib')"></select></div>
+          <div class="dz-preview" id="prev-atrib"></div>
         </div>
-        <div class="dz-preview" id="prev-atrib"></div>
-        </div><!-- /dz-body -->
       </div>
 
       <!-- CHECK-IN -->
       <div class="drop-zone" id="zone-checkin"
            ondragover="onDrag(event,'checkin')" ondragleave="offDrag('checkin')" ondrop="onDrop(event,'checkin')">
         <input class="file-input" type="file" accept=".csv,.txt" onchange="onFile(event,'checkin')">
-        <div class="dz-icon" id="icon-checkin">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 12l2 2 4-4"/><path d="M9 6h6"/></svg>
+        <div class="dz-top">
+          <div class="dz-icon" id="icon-checkin">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 12l2 2 4-4"/><path d="M9 6h6"/></svg>
+          </div>
+          <div>
+            <div class="dz-title">Check-in YMS</div>
+            <div class="dz-hint" id="hint-checkin">Arraste o .csv ou clique para selecionar</div>
+            <div class="dz-filename" id="fname-checkin"></div>
+          </div>
         </div>
-        <div class="dz-body">
-        <div class="dz-title">Check-in YMS</div>
-        <div class="dz-hint">Arraste o .csv ou clique para selecionar</div>
-        <div class="dz-filename" id="fname-checkin"></div>
-        <div class="dz-info"></div>
         <div class="dz-cols" id="cols-checkin">
           <div class="col-row"><label>Driver Name:</label><select id="sel-c-nome" onchange="updatePreview('checkin')"></select></div>
           <div class="col-row"><label>Status:</label><select id="sel-c-status" onchange="updatePreview('checkin')"></select></div>
           <div class="col-row"><label>Waiting Time:</label><select id="sel-c-wait" onchange="updatePreview('checkin')"></select></div>
+          <div class="dz-preview" id="prev-checkin"></div>
         </div>
-        <div class="dz-preview" id="prev-checkin"></div>
-        </div><!-- /dz-body -->
       </div>
 
       <!-- TELEFONES -->
       <div class="drop-zone" id="zone-phone"
            ondragover="onDrag(event,'phone')" ondragleave="offDrag('phone')" ondrop="onDrop(event,'phone')">
         <input class="file-input" type="file" accept=".csv,.txt" onchange="onFile(event,'phone')">
-        <div class="dz-icon" id="icon-phone">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="dz-body">
-          <div class="dz-title">Telefones (opcional)</div>
-          <div class="dz-hint">Cadastro de drivers · Driver Name + Phone Number</div>
-          <div class="dz-filename" id="fname-phone"></div>
-          <div class="dz-cols" id="cols-phone">
-            <div class="col-row"><label>Driver Name:</label><select id="sel-p-nome" onchange="updatePreview('phone')"></select></div>
-            <div class="col-row"><label>Phone Number:</label><select id="sel-p-fone" onchange="updatePreview('phone')"></select></div>
+        <div class="dz-top">
+          <div class="dz-icon" id="icon-phone">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           </div>
+          <div>
+            <div class="dz-title">Telefones (opcional)</div>
+            <div class="dz-hint" id="hint-phone">Cadastro drivers · Driver Name + Phone Number</div>
+            <div class="dz-filename" id="fname-phone"></div>
+          </div>
+        </div>
+        <div class="dz-cols" id="cols-phone">
+          <div class="col-row"><label>Driver Name:</label><select id="sel-p-nome" onchange="updatePreview('phone')"></select></div>
+          <div class="col-row"><label>Phone Number:</label><select id="sel-p-fone" onchange="updatePreview('phone')"></select></div>
           <div class="dz-preview" id="prev-phone"></div>
-        </div><!-- /dz-body -->
+        </div>
       </div>
 
     </div>
@@ -359,7 +377,6 @@ tr.row-ended td{background:var(--gray-light);color:var(--gray-dark)}
           Pendentes
           <span class="badge badge-pend" id="tab-cnt">0</span>
         </button>
-      </div>
         <button class="tab-btn" onclick="sw('let',this)">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h12"/><circle cx="19" cy="18" r="3"/></svg>
           Por letra
@@ -396,26 +413,33 @@ tr.row-ended td{background:var(--gray-light);color:var(--gray-dark)}
         </div>
       </div>
 
-      <!-- PENDENTES -->
+      <!-- PENDENTES + DIVERGÊNCIAS -->
       <div id="view-pnd" style="display:none">
         <div class="view-header">
           <span class="view-title">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Drivers sem check-in
+            Atenção
           </span>
-          <span class="badge badge-pend" id="b-pend2">0 pendentes</span>
+          <div class="badges-row">
+            <span class="badge badge-pend" id="b-pend2">0 sem check-in</span>
+          </div>
         </div>
         <div class="search-bar"><input type="text" id="search-pnd" placeholder="Buscar driver ou cluster..." oninput="filterPnd()"></div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr>
-              <th>Driver</th>
-              <th style="width:150px">Rota</th>
-              <th style="width:150px">Cluster</th>
-              <th style="width:110px">Situação</th>
-            </tr></thead>
-            <tbody id="tbody-pnd"></tbody>
-          </table>
+
+        <!-- PENDENTES (não chegaram) -->
+        <div id="pnd-pend-section">
+          <div class="tbl-wrap" style="border-radius:0;border-top:none;border-color:var(--orange-mid)">
+            <table>
+              <thead><tr>
+                <th>Driver / Contato</th>
+                <th style="width:110px">Rota</th>
+                <th style="width:120px">Cluster</th>
+                <th style="width:120px">Previsão</th>
+                <th style="width:100px">Situação</th>
+              </tr></thead>
+              <tbody id="tbody-pnd"></tbody>
+            </table>
+          </div>
         </div>
       </div>
       <!-- POR LETRA -->
@@ -638,14 +662,16 @@ function processar(){
     seenAtrib.add(k);return true;
   });
 
-  // Check-in: deduplica por nome, pega último status
+  // Check-in: rastreia se driver passou por Assigned antes de Ended
   const checkinMap=new Map();
+  const hadAssigned=new Set(); // drivers que tiveram status Assigned
   rawData.checkin.rows.forEach(r=>{
     const nome=getVal(r,kc_nome);
     if(!nome)return;
     const status=getVal(r,kc_stat).toLowerCase();
     const wait=getVal(r,kc_wait);
     const k=norm(nome);
+    if(status==='assigned') hadAssigned.add(k);
     const prev=checkinMap.get(k);
     if(!prev||status==='ended'){
       checkinMap.set(k,{nome,status,wait});
@@ -666,22 +692,26 @@ function processar(){
     const match=[...checkinMap.entries()].find(([mk])=>matchNames(d.nome,mk));
     if(match){
       const ci=match[1];
-      const st=ci.status==='ended'?'ended':'assigned';
-      return{...d,checkin:true,status:st,wait:ci.wait,phone};
+      const mk=match[0];
+      // alert: Ended sem ter passado por Assigned = check-in suspeito
+      const isAlert=ci.status==='ended'&&!hadAssigned.has(mk);
+      const st=isAlert?'alert':(ci.status==='ended'?'ended':'assigned');
+      return{...d,checkin:true,status:st,wait:ci.wait,phone,alert:isAlert};
     }
     return{...d,checkin:false,status:'pending',wait:'',phone};
   });
 
   lstData=[...allDrivers].sort((a,b)=>{
     const order={pending:0,assigned:1,ended:2};
-    return(order[a.status]||0)-(order[b.status]||0)||a.cluster.localeCompare(b.cluster)||a.nome.localeCompare(b.nome);
+    return(order[a.status]||0)-(order[b.status]||0)||sortRoutes(a.rota,b.rota)||a.nome.localeCompare(b.nome);
   });
-  pndData=allDrivers.filter(d=>d.status==='pending').sort((a,b)=>a.cluster.localeCompare(b.cluster)||a.nome.localeCompare(b.nome));
+  pndData=allDrivers.filter(d=>d.status==='pending').sort((a,b)=>sortRoutes(a.rota,b.rota)||a.nome.localeCompare(b.nome));
 
   renderMetrics();
   renderRegioes();
   renderLst(lstData);
   renderPnd(pndData);
+  renderAlertRows(allDrivers.filter(d=>d.status==='alert').sort((a,b)=>sortRoutes(a.rota,b.rota)));
   renderLetras();
 
   document.getElementById('metrics-area').style.display='block';
@@ -709,8 +739,9 @@ function renderMetrics(){
   const tot=allDrivers.length;
   const assigned=allDrivers.filter(d=>d.status==='assigned').length;
   const ended=allDrivers.filter(d=>d.status==='ended').length;
+  const alerts=allDrivers.filter(d=>d.status==='alert').length;
   const pend=allDrivers.filter(d=>d.status==='pending').length;
-  const pct=tot>0?Math.round(((assigned+ended)/tot)*100):0;
+  const pct=tot>0?Math.round(((assigned+ended+alerts)/tot)*100):0;
   document.getElementById('m-tot').textContent=tot;
   document.getElementById('m-assigned').textContent=assigned;
   document.getElementById('m-ended').textContent=ended;
@@ -719,14 +750,25 @@ function renderMetrics(){
   document.getElementById('prog').style.width=pct+'%';
   document.getElementById('tab-cnt').textContent=pend;
   document.getElementById('b-pend').textContent=pend+' pendentes';
-  document.getElementById('b-pend2').textContent=pend+' pendentes';
+  document.getElementById('b-pend2').textContent=pend+' sem check-in';
   document.getElementById('b-assigned').textContent=assigned+' assigned';
   document.getElementById('b-ended').textContent=ended+' ended';
+  // alert badges
+  const tabAlertCnt=document.getElementById('tab-alert-cnt');
+  const bAlert2=document.getElementById('b-alert2');
+  const bAlert3=document.getElementById('b-alert3');
+  const alertSec=document.getElementById('pnd-alert-section');
+  if(tabAlertCnt){tabAlertCnt.textContent=alerts;tabAlertCnt.style.display=alerts>0?'inline-flex':'none';}
+  if(bAlert2){bAlert2.textContent=alerts+' suspeitos';bAlert2.style.display=alerts>0?'inline-flex':'none';}
+  if(bAlert3){bAlert3.textContent=alerts;}
+  if(alertSec){alertSec.style.display=alerts>0?'block':'none';}
+  if(document.getElementById('b-pend3-inner'))document.getElementById('b-pend3-inner').textContent=pend;
 }
 
 function statusLabel(st){
   if(st==='assigned')return'<span class="status-pill pill-assigned"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Assigned</span>';
   if(st==='ended')return'<span class="status-pill pill-ended"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 12 11 14 15 10"/></svg>Ended</span>';
+  if(st==='alert')return'<span class="status-pill pill-alert"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>⚠ Suspeito</span>';
   return'<span class="status-pill pill-pending"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>Pendente</span>';
 }
 
@@ -768,12 +810,37 @@ function renderRegioes(){
 
 function renderLst(data){
   document.getElementById('tbody-lst').innerHTML=data.map(d=>`
-    <tr class="row-${d.status}">
+    <tr class="row-${d.status==='alert'?'alert':d.status}">
       <td>${statusLabel(d.status)}</td>
       <td title="${d.nome}">${d.nome}</td>
       <td title="${d.rota}">${d.rota}</td>
       <td>${d.cluster}</td>
       <td style="font-family:var(--mono)">${d.wait||'—'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderAlertRows(data){
+  const tb=document.getElementById('tbody-alert');
+  if(!tb)return;
+  if(!data.length){tb.innerHTML='';return;}
+  tb.innerHTML=data.map(d=>`
+    <tr class="row-alert">
+      <td title="${d.nome}">
+        <strong>${d.nome}</strong>
+        ${d.phone?`<div class="dr-phone-row">
+          <span class="phone-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${d.phone}</span>
+          ${buildWaLink(d.phone,d.nome)}
+        </div>`:''}
+        <div class="eta-wrap">
+          <input class="eta-input" type="text" placeholder="Previsão ex: 08:30" id="eta-${norm(d.nome)}" value="${etaMap.get(norm(d.nome))||''}" onchange="saveEta('${norm(d.nome)}',this.value)" onclick="event.stopPropagation()">
+          <span class="eta-saved" id="eta-ok-${norm(d.nome)}">✓ salvo</span>
+        </div>
+      </td>
+      <td>${d.rota}</td>
+      <td>${d.cluster}</td>
+      <td style="font-family:var(--mono);color:#854D0E">${etaMap.get(norm(d.nome))||'—'}</td>
+      <td><span class="status-pill pill-alert">⚠ Suspeito</span></td>
     </tr>
   `).join('');
 }
@@ -809,9 +876,19 @@ function renderPnd(data){
           </span>
           ${buildWaLink(d.phone, d.nome)}
         </div>` : ''}
+        <div class="eta-wrap">
+          <input class="eta-input" type="text" placeholder="Previsão ex: 08:30"
+            id="eta-${norm(d.nome)}"
+            value="${etaMap.get(norm(d.nome))||''}"
+            onchange="saveEta('${norm(d.nome)}',this.value)"
+            onclick="event.stopPropagation()"
+            title="Registrar previsão de chegada do driver">
+          <span class="eta-saved" id="eta-ok-${norm(d.nome)}">✓ salvo</span>
+        </div>
       </td>
       <td>${d.rota}</td>
       <td>${d.cluster}</td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--orange-dark)">${etaMap.get(norm(d.nome))||'—'}</td>
       <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
         Não realizado
@@ -831,6 +908,9 @@ function filterPnd(){
 }
 
 function sortRoutes(a,b){
+  const la=(a.match(/^[A-Za-z]+/)||[''])[0].toUpperCase();
+  const lb=(b.match(/^[A-Za-z]+/)||[''])[0].toUpperCase();
+  if(la!==lb)return la.localeCompare(lb);
   const na=parseInt((a.match(/\d+/)||[0])[0]);
   const nb=parseInt((b.match(/\d+/)||[0])[0]);
   return na-nb;
@@ -997,6 +1077,15 @@ function renderLetras(){
   });
 }
 
+const etaMap = new Map();
+
+function saveEta(key, value){
+  if(value) etaMap.set(key, value);
+  else etaMap.delete(key);
+  const ok = document.getElementById('eta-ok-'+key);
+  if(ok){ ok.style.display='inline'; setTimeout(()=>ok.style.display='none', 1500); }
+}
+
 function mcClick(status){
   // clear mc active states
   document.querySelectorAll('.mc').forEach(m=>m.classList.remove('mc-active'));
@@ -1012,10 +1101,17 @@ function mcClick(status){
   }
 
   if(status==='pending'){
-    // go to Pendentes tab
     const btn=document.querySelector('#tab-pnd-btn');
     sw('pnd',btn);
     document.getElementById('mc-pend').classList.add('mc-active');
+    return;
+  }
+  if(status==='alert'){
+    const btn=document.querySelector('#tab-lst-btn');
+    sw('lst',btn);
+    renderLst(lstData.filter(d=>d.status==='alert'));
+    document.getElementById('search-lst').value='';
+    document.getElementById('mc-alert').classList.add('mc-active');
     return;
   }
 
