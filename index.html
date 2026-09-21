@@ -160,6 +160,27 @@ tr.row-occupied td{background:#EFF6FF;color:#1D4ED8;font-weight:600}
 .empty svg{opacity:.3;display:block;margin:0 auto 1rem}
 .empty-title{font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px}
 .footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:1rem}
+.config-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1rem}
+.config-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.config-title svg{transition:transform .2s}
+.config-title.open svg{transform:rotate(180deg)}
+.config-body{display:none}
+.config-body.open{display:block}
+.config-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.config-group{display:flex;flex-direction:column;gap:4px}
+.config-label{font-size:11px;font-weight:600;color:var(--text2)}
+.config-input{font-size:12px;font-family:var(--mono);padding:7px 10px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface2);color:var(--text);outline:none;width:100%}
+.config-input:focus{border-color:var(--orange)}
+.config-hint{font-size:10px;color:var(--text3);margin-top:2px}
+.shift-selector{display:flex;gap:6px;flex-wrap:wrap}
+.shift-btn{padding:6px 14px;font-size:12px;font-weight:500;font-family:var(--font);border:1.5px solid var(--border2);border-radius:99px;background:var(--surface);cursor:pointer;transition:all .15s;white-space:nowrap}
+.shift-btn:hover{border-color:var(--orange);color:var(--orange)}
+.shift-btn.active{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:600}
+.btn-fetch-atrib{width:100%;padding:8px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:var(--radius);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.btn-fetch-atrib:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-light)}
+.btn-fetch-atrib.loading{border-color:var(--blue);color:var(--blue)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 @media(max-width:768px){
   .import-grid{grid-template-columns:1fr}
@@ -189,6 +210,46 @@ tr.row-occupied td{background:#EFF6FF;color:#1D4ED8;font-weight:600}
 <div class="main">
 
   <!-- IMPORT -->
+  <!-- CONFIG PANEL -->
+  <div class="config-panel">
+    <div class="config-title" id="cfg-title" onclick="toggleConfig()">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:6px"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Configuração de conexão SPX
+      </span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="config-body" id="cfg-body">
+      <div class="config-row">
+        <div class="config-group">
+          <div class="config-label">Station ID</div>
+          <input class="config-input" id="cfg-station" value="5039" placeholder="ex: 5039">
+          <div class="config-hint">ID da estação no SPX — ver URL do sistema</div>
+        </div>
+        <div class="config-group">
+          <div class="config-label">Turno atual</div>
+          <div class="shift-selector" id="shift-selector">
+            <button class="shift-btn" onclick="selectShift('AM-1','06:00','09:00')">AM-1 · 06:00–09:00</button>
+            <button class="shift-btn" onclick="selectShift('AM-2','09:00','12:00')">AM-2 · 09:00–12:00</button>
+            <button class="shift-btn active" onclick="selectShift('PM-1','12:00','15:15')">PM-1 · 12:00–15:15</button>
+            <button class="shift-btn" onclick="selectShift('PM-2','15:00','18:00')">PM-2 · 15:00–18:00</button>
+          </div>
+          <div class="config-hint">Selecione o turno para filtrar a atribuição</div>
+        </div>
+      </div>
+      <div class="config-group" style="margin-bottom:10px">
+        <div class="config-label">Cookies de sessão SPX</div>
+        <textarea class="config-input" id="cfg-cookies" rows="3" placeholder="Cole aqui os cookies copiados do F12 → Network → Headers → Cookie&#10;&#10;Exemplo: fms_user_id=123456; fms_user_skey=abc...; csrftoken=xyz..."></textarea>
+        <div class="config-hint">⚠️ Não compartilhe seus cookies. Eles expiram automaticamente ao sair do sistema.</div>
+      </div>
+      <button class="btn-fetch-atrib" id="btn-fetch-atrib" onclick="fetchAtribuicao()">
+        <svg id="fa-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Buscar Atribuição automaticamente
+      </button>
+      <div id="fetch-atrib-status" style="display:none;margin-top:8px;font-size:12px;padding:8px 12px;border-radius:var(--radius)"></div>
+    </div>
+  </div>
+
   <div class="import-card">
 
     <div class="import-grid">
@@ -236,10 +297,23 @@ tr.row-occupied td{background:#EFF6FF;color:#1D4ED8;font-weight:600}
       </label>
 
     </div>
-    <button class="btn-proc" id="btn-proc" onclick="processar()" disabled>
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.63"/></svg>
-      Processar e Atualizar Dashboard
-    </button>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+      <div id="api-status" style="display:none;align-items:center;gap:8px;padding:8px 14px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:var(--radius);font-size:12px;color:#1D4ED8;flex:1">
+        <svg id="api-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.63"/></svg>
+        <span id="api-msg">Check-in YMS: aguardando...</span>
+        <span id="api-countdown" style="margin-left:auto;font-family:var(--mono);font-size:11px;color:#3B82F6"></span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-proc" id="btn-proc" onclick="processar()" disabled style="flex:1">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.63"/></svg>
+        Processar e Atualizar Dashboard
+      </button>
+      <button id="btn-api" onclick="toggleApi()" style="padding:10px 16px;background:var(--surface);border:1.5px solid var(--border2);border-radius:var(--radius);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;white-space:nowrap;color:var(--text2);transition:all .15s" title="Conectar ao Queue List YMS em tempo real">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Auto Check-in
+      </button>
+    </div>
   </div>
 
   <!-- METRICS -->
@@ -725,6 +799,355 @@ function sw(view,el){
   if(el)el.classList.add('active');
   if(view==='lst'){renderLst(lstData);document.getElementById('search-lst').value='';}
   document.querySelectorAll('.mc').forEach(function(m){m.classList.remove('active');});
+}
+
+// ── AUTO CHECK-IN via Queue List API ─────────────────────────────────────────
+var apiActive = false;
+var apiTimer = null;
+var apiCountdown = null;
+var API_INTERVAL = 120; // seconds
+var apiSecondsLeft = 0;
+
+function toggleApi(){
+  if(apiActive){
+    stopApi();
+  } else {
+    startApi();
+  }
+}
+
+function startApi(){
+  apiActive = true;
+  var btn = document.getElementById('btn-api');
+  btn.style.background = '#EFF6FF';
+  btn.style.borderColor = '#3B82F6';
+  btn.style.color = '#1D4ED8';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg> Conectado';
+  document.getElementById('api-status').style.display = 'flex';
+  fetchCheckin();
+  startCountdown();
+}
+
+function stopApi(){
+  apiActive = false;
+  clearInterval(apiTimer);
+  clearInterval(apiCountdown);
+  var btn = document.getElementById('btn-api');
+  btn.style.background = '';
+  btn.style.borderColor = '';
+  btn.style.color = '';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Auto Check-in';
+  document.getElementById('api-status').style.display = 'none';
+}
+
+function startCountdown(){
+  clearInterval(apiCountdown);
+  apiSecondsLeft = API_INTERVAL;
+  apiCountdown = setInterval(function(){
+    apiSecondsLeft--;
+    var el = document.getElementById('api-countdown');
+    if(el) el.textContent = 'próx. atualização: ' + apiSecondsLeft + 's';
+    if(apiSecondsLeft <= 0){
+      apiSecondsLeft = API_INTERVAL;
+      fetchCheckin();
+    }
+  }, 1000);
+}
+
+function setApiMsg(msg, spin){
+  var el = document.getElementById('api-msg');
+  var spinEl = document.getElementById('api-spin');
+  if(el) el.textContent = msg;
+  if(spinEl){
+    spinEl.style.animation = spin ? 'spin 1s linear infinite' : '';
+  }
+}
+
+function fetchCheckin(){
+  if(!apiActive) return;
+  setApiMsg('Atualizando check-in...', true);
+  fetch('https://spx.shopee.com.br/api/in-station/dock_management/queue/list', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'accept': 'application/json, text/plain, */*',
+      'app': 'FMS Portal',
+      'referer': 'https://spx.shopee.com.br/',
+      'x-csrftoken': getCsrfToken()
+    },
+    credentials: 'include',
+    body: JSON.stringify({pageno:1, count:500, queue_type:1, queue_status:'1,2,3,5,4'})
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(json){
+    if(json.retcode !== 0){ setApiMsg('Erro: ' + json.message, false); return; }
+    var data = json.data || {};
+    var list = data.list || data.queue_list || data.data || [];
+    if(!Array.isArray(list)){ 
+      setApiMsg('Check-in YMS: sem veículos na fila agora (' + new Date().toLocaleTimeString('pt-BR') + ')', false);
+      return;
+    }
+    applyApiCheckin(list);
+    setApiMsg('Check-in atualizado: ' + list.length + ' na fila — ' + new Date().toLocaleTimeString('pt-BR'), false);
+  })
+  .catch(function(err){
+    setApiMsg('Falha na conexão — verifique se está logado no SPX', false);
+    console.error('YMS API error:', err);
+  });
+}
+
+function getCsrfToken(){
+  var match = document.cookie.match(/csrftoken=([^;]+)/);
+  return match ? match[1] : '';
+}
+
+function applyApiCheckin(list){
+  // Map API response to checkin format
+  // Fields to try: driver_name, name, vehicle_number, status, waiting_time
+  var newCiMap = new Map();
+  list.forEach(function(item){
+    var nome = item.driver_name || item.name || item.driver || '';
+    if(!nome) return;
+    var rawSt = (item.status || item.queue_status || '').toString().toLowerCase();
+    // Map numeric or string status
+    // queue_status: 1=pending, 2=assigned, 3=occupied, 4=ended, 5=on_hold
+    var st;
+    if(rawSt === '2' || rawSt === 'assigned') st = 'assigned';
+    else if(rawSt === '3' || rawSt === 'occupied') st = 'occupied';
+    else if(rawSt === '4' || rawSt === 'ended') st = 'ended';
+    else st = 'assigned';
+    var wait = item.waiting_time || item.wait_time || '';
+    newCiMap.set(norm(nome), {nome:nome, status:st, wait:wait});
+  });
+
+  // Re-match with existing atrib
+  if(!rawData.atrib) return;
+  var ha = rawData.atrib.headers;
+  var ia_nome = guessCol(ha, ['driver name','driver id','driver','motorista','nome']);
+  var ia_rota = guessCol(ha, ['corridor-cage/route','corridor','route','rota','corredor']);
+  var ia_clust = guessCol(ha, ['cluster','regiao','região','zona','setor','area']);
+
+  var seen = new Set();
+  var atrib = [];
+  rawData.atrib.rows.forEach(function(r){
+    var v = Object.values(r);
+    var nome = (v[ia_nome]||'').trim();
+    if(!nome) return;
+    var k = norm(nome);
+    if(seen.has(k)) return;
+    seen.add(k);
+    atrib.push({nome:nome, rota:(v[ia_rota]||'').trim()||'—', cluster:(v[ia_clust]||'').trim()||'Sem cluster'});
+  });
+
+  allDrivers = atrib.map(function(d){
+    var k = norm(d.nome);
+    var phone = phoneMap.get(k) || '';
+    if(!phone){
+      var found = null;
+      phoneMap.forEach(function(v,mk){if(!found&&matchNames(d.nome,mk))found=v;});
+      if(found) phone = found;
+    }
+    var match = newCiMap.get(k);
+    if(!match){
+      newCiMap.forEach(function(v,mk){if(!match&&matchNames(d.nome,mk))match=v;});
+    }
+    if(match){ return Object.assign({},d,{checkin:true,status:match.status,wait:match.wait,phone:phone}); }
+    return Object.assign({},d,{checkin:false,status:'pending',wait:'',phone:phone});
+  });
+
+  lstData = allDrivers.slice().sort(function(a,b){
+    var o={pending:0,assigned:1,occupied:2,ended:3};
+    return(o[a.status]||0)-(o[b.status]||0)||sortRoutes(a.rota,b.rota)||a.nome.localeCompare(b.nome);
+  });
+  pndData = allDrivers.filter(function(d){return d.status==='pending';}).sort(function(a,b){
+    return sortRoutes(a.rota,b.rota)||a.nome.localeCompare(b.nome);
+  });
+
+  renderMetrics();
+  renderRegioes();
+  renderLst(lstData);
+  renderPnd(pndData);
+  renderLetras();
+  document.getElementById('last-upd').textContent = 'Auto-atualizado: ' + new Date().toLocaleTimeString('pt-BR') + ' — ' + allDrivers.length + ' drivers';
+}
+
+// ── CONFIG PANEL ─────────────────────────────────────────────────────────────
+var selectedShift = {name:'PM-1', start:'12:00', end:'15:15'};
+
+function toggleConfig(){
+  var body = document.getElementById('cfg-body');
+  var title = document.getElementById('cfg-title');
+  body.classList.toggle('open');
+  title.classList.toggle('open');
+}
+
+function selectShift(name, start, end){
+  selectedShift = {name:name, start:start, end:end};
+  document.querySelectorAll('.shift-btn').forEach(function(b){
+    b.classList.toggle('active', b.textContent.indexOf(name) >= 0);
+  });
+}
+
+function getCookiesFromField(){
+  var manual = document.getElementById('cfg-cookies').value.trim();
+  if(manual) return manual;
+  return document.cookie; // fallback: cookies do browser
+}
+
+function parseCookieStr(str){
+  var obj = {};
+  str.split(';').forEach(function(pair){
+    var idx = pair.indexOf('=');
+    if(idx < 0) return;
+    var k = pair.slice(0,idx).trim();
+    var v = pair.slice(idx+1).trim();
+    obj[k] = v;
+  });
+  return obj;
+}
+
+function getCsrfFromCookies(){
+  var str = getCookiesFromField();
+  var cookies = parseCookieStr(str);
+  return cookies['csrftoken'] || '';
+}
+
+function buildCookieHeader(){
+  return getCookiesFromField();
+}
+
+function fetchAtribuicao(){
+  var stationId = parseInt(document.getElementById('cfg-station').value) || 5039;
+  var btn = document.getElementById('btn-fetch-atrib');
+  var status = document.getElementById('fetch-atrib-status');
+  var icon = document.getElementById('fa-icon');
+
+  btn.classList.add('loading');
+  icon.style.animation = 'spin 1s linear infinite';
+  status.style.display = 'block';
+  status.style.background = '#EFF6FF';
+  status.style.color = '#1D4ED8';
+  status.style.border = '1px solid #BFDBFE';
+  status.textContent = 'Buscando evento do turno ' + selectedShift.name + '...';
+
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var todayTs = Math.floor(today.getTime() / 1000);
+
+  // Step 1: get event list for today
+  fetch('https://spx.shopee.com.br/spx_delivery/admin/roster_planning_event/event/list_for_portal', {
+    method: 'POST',
+    headers: buildApiHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({pageno:1, count:20, start_timestamp_gte: todayTs})
+  })
+  .then(function(r){return r.json();})
+  .then(function(json){
+    if(json.retcode !== 0) throw new Error(json.message || 'Erro ao buscar eventos');
+    var tasks = (json.data || {}).task_list || [];
+    // find event for this station and shift
+    var event = tasks.find(function(t){
+      return t.station_id === stationId;
+    });
+    if(!event) throw new Error('Nenhum evento encontrado para station_id ' + stationId + ' hoje');
+    status.textContent = 'Evento encontrado: ' + event.route_match_driver_task_id + ' — buscando drivers...';
+    return fetchDriversFromEvent(event.route_match_driver_task_id, stationId);
+  })
+  .catch(function(err){
+    showAtribError(err.message || String(err));
+    resetAtribBtn();
+  });
+}
+
+function fetchDriversFromEvent(eventId, stationId){
+  // This endpoint will be confirmed tomorrow with real data
+  // Trying roster/driver/list endpoint pattern
+  fetch('https://spx.shopee.com.br/spx_delivery/admin/roster_planning_event/driver/list', {
+    method: 'POST',
+    headers: buildApiHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({event_id: eventId, station_id: stationId, pageno:1, count:500})
+  })
+  .then(function(r){return r.json();})
+  .then(function(json){
+    if(json.retcode !== 0) throw new Error(json.message || 'Erro ao buscar drivers');
+    var list = (json.data || {}).list || (json.data || {}).driver_list || (json.data || {}).task_list || [];
+    if(!list.length){
+      showAtribError('Nenhum driver encontrado neste evento. Tente amanhã cedo ou use o CSV.');
+      resetAtribBtn();
+      return;
+    }
+    applyAtribuicaoApi(list);
+  })
+  .catch(function(err){
+    showAtribError('Endpoint de drivers não confirmado ainda. Use o CSV por enquanto. (' + err.message + ')');
+    resetAtribBtn();
+  });
+}
+
+function buildApiHeaders(){
+  var csrf = getCsrfFromCookies();
+  var headers = {
+    'Content-Type': 'application/json',
+    'accept': 'application/json, text/plain, */*',
+    'app': 'FMS Portal',
+    'referer': 'https://spx.shopee.com.br/',
+    'x-csrftoken': csrf
+  };
+  var cookieStr = getCookiesFromField();
+  if(cookieStr) headers['cookie'] = cookieStr;
+  return headers;
+}
+
+function applyAtribuicaoApi(list){
+  // Map driver list fields — will be confirmed tomorrow
+  var rows = list.map(function(item){
+    return {
+      'Driver name': item.driver_name || item.name || item.driver || '',
+      'Corridor-Cage/Route': item.route || item.corridor || item.route_name || '',
+      'Cluster': item.cluster || item.cluster_name || item.area || ''
+    };
+  }).filter(function(r){return r['Driver name'];});
+
+  if(!rows.length){
+    showAtribError('Nenhum driver mapeado. Os campos da API precisam ser confirmados.');
+    resetAtribBtn();
+    return;
+  }
+
+  rawData.atrib = {
+    headers: ['Driver name','Corridor-Cage/Route','Cluster'],
+    rows: rows
+  };
+
+  document.getElementById('uz-atrib').classList.add('loaded');
+  document.getElementById('uzi-atrib').innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+  document.getElementById('uf-atrib').textContent = 'API SPX — ' + rows.length + ' drivers (' + selectedShift.name + ')';
+
+  var status = document.getElementById('fetch-atrib-status');
+  status.style.background = '#F0FDF4';
+  status.style.color = '#166534';
+  status.style.border = '1px solid #BBF7D0';
+  status.textContent = '✓ ' + rows.length + ' drivers carregados via API — Turno ' + selectedShift.name;
+
+  checkReady();
+  resetAtribBtn();
+}
+
+function showAtribError(msg){
+  var status = document.getElementById('fetch-atrib-status');
+  status.style.display = 'block';
+  status.style.background = '#FFF0ED';
+  status.style.color = '#B83410';
+  status.style.border = '1px solid #FFDDD7';
+  status.textContent = '⚠ ' + msg;
+}
+
+function resetAtribBtn(){
+  var btn = document.getElementById('btn-fetch-atrib');
+  var icon = document.getElementById('fa-icon');
+  btn.classList.remove('loading');
+  icon.style.animation = '';
 }
 </script>
 </body>
